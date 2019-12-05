@@ -57,7 +57,7 @@ class FirstScene extends Phaser.Scene
         let perX = 0;
         let perY = 300;
 
-        for(var i = 0; i < 18; i++)
+        for(var i = 0; i < 48; i++)
         {
             this.platforms.create(perX, perY, "platform");
             perX += Math.random() * 250;
@@ -73,7 +73,7 @@ class FirstScene extends Phaser.Scene
                 perY = 200;
             }
 
-        }
+        }  
 
         this.stars = this.physics.add.group(
             {
@@ -106,6 +106,21 @@ class FirstScene extends Phaser.Scene
         this.physics.add.collider(this.bombs, this.platforms);
         this.physics.add.overlap(this.player, this.bombs, this.endGame, null, this);
         this.makeBomb();
+
+        console.log(this.checkPlatformOverlap());
+
+        
+
+        /*
+        this.platforms.children.iterate(function(child)
+        {
+            Phaser.Physics.Arcade.overlap(child, this.platforms, function(childChild)
+            {
+                childChild.x = Phaser.Math.Between(50,1550);
+                childChild.y = Phaser.Math.Between(100, 500);
+            });
+        });  
+        */
 
         //----------------------------- Animations Start ------------------------------------
         this.anims.create({
@@ -176,6 +191,8 @@ class FirstScene extends Phaser.Scene
             {
                 this.player.jumpCount = 0;
             }
+            
+            
         }
     }
 
@@ -183,7 +200,7 @@ class FirstScene extends Phaser.Scene
     {
         star.disableBody(true,true);
         
-        if(((this.score + 1) % 6) == 0)
+        if(((this.score + 1) % 8) == 0)
         {
             this.makeBomb();
         }
@@ -199,8 +216,6 @@ class FirstScene extends Phaser.Scene
                     child.enableBody(true, child.x, 0, true, true);
                 }
             );
-
-            this.score = 0;
         }
         
         this.scoreText.setText("Score: " + this.score);
@@ -210,9 +225,9 @@ class FirstScene extends Phaser.Scene
     {
         let x = (this.player.x < 600) ? Phaser.Math.Between(600, 1200) : Phaser.Math.Between(0, 600);
         let bomb = this.bombs.create(x, 16, "bomb");
-        bomb.setBounce(1);
+        bomb.setBounce(0.9);
         bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        bomb.setVelocity(Phaser.Math.Between(-150, 150), 20);
         bomb.allowGravity = false;
     }
 
@@ -221,5 +236,26 @@ class FirstScene extends Phaser.Scene
         this.physics.pause();
         this.player.setTint(0xff0000);
         this.player.anims.play("relaxPlayer");
+    }
+
+    checkPlatformOverlap()
+    {
+        let overlap = false;
+
+        this.physics.add.overlap(this.platforms, this.platforms, function(child1, child2)
+        {
+            child1.disableBody(true, true);
+            overlap = true;
+        });
+
+        this.platforms.children.iterate(function(child)
+        {
+            if(!child.active)
+            {
+                overlap = true;
+            }
+        });
+
+        return overlap;
     }
 }
