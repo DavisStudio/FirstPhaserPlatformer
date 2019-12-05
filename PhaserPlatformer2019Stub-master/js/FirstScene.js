@@ -15,20 +15,43 @@ class FirstScene extends Phaser.Scene
             frameWidth: 32, 
             frameHeight: 48});
         this.load.image("groundPlatform", "assets/platform-1600.png");
+        this.load.image("platform", "assets/platform-100.png");
     }
 
     create()
     {
+        this.physics.world.setBounds(0,0,1600,600);
+        this.cameras.main.setBounds(0,0,1600,600);
+
         this.add.image(800,300, "hills");
-        this.player = this.physics.add.sprite(100,450, "dude");
+        this.player = this.physics.add.sprite(700,450, "dude");
         this.player.setCollideWorldBounds(true);
         this.player.jumpCount = 0;
+
+        this.cameras.main.startFollow(this.player, true, 0.5, 0.5);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.platforms = this.physics.add.staticGroup();
         this.physics.add.collider(this.player, this.platforms);
         this.platforms.create(800, 586, "groundPlatform");
+        this.platforms.create(100, 500, "platform");
+        this.platforms.create(300, 300, "platform");
+        this.platforms.create(400, 100, "platform");
+        this.platforms.create(600, 200, "platform");
+        this.platforms.create(400, 500, "platform");
+        this.platforms.create(200, 400, "platform");
+        this.platforms.create(500, 500, "platform");
+        this.platforms.create(700, 300, "platform");
+        this.platforms.create(100, 180, "platform");
+
+
+        /*
+        for(var i = 0; i < 6; i++)
+        {
+            this.platforms.create(Math.random() * 600, Math.random() * 500 + 100, "platform");
+        }
+        */
 
         this.anims.create({
             key: "leftRunPlayer",
