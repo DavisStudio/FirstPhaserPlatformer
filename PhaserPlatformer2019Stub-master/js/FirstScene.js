@@ -57,7 +57,7 @@ class FirstScene extends Phaser.Scene
         let perX = 0;
         let perY = 300;
 
-        for(var i = 0; i < 48; i++)
+        for(var i = 0; i < 18; i++)
         {
             this.platforms.create(perX, perY, "platform");
             perX += Math.random() * 250;
