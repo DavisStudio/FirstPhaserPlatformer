@@ -6,7 +6,8 @@ class FirstScene extends Phaser.Scene
     scoreText;
     score = 0;
     ingGame = true;
-
+    points = [];
+    
     constructor(config)
     {
         super(config);
@@ -23,6 +24,10 @@ class FirstScene extends Phaser.Scene
         this.load.image("star", "assets/star.png");
         this.load.image("bomb", "assets/bomb.png");
     }
+
+    rect;
+    rectangles;
+    graphics;
 
     create()
     {
@@ -54,6 +59,7 @@ class FirstScene extends Phaser.Scene
         this.platforms.create(100, 180, "platform");
         */
 
+        /*
         let perX = 0;
         let perY = 300;
 
@@ -74,6 +80,8 @@ class FirstScene extends Phaser.Scene
             }
 
         }  
+        */
+
 
         this.stars = this.physics.add.group(
             {
@@ -121,6 +129,73 @@ class FirstScene extends Phaser.Scene
             });
         });  
         */
+
+        // Example Used -> https://phaser.io/examples/v3/view/geom/rectangle/contains-rect
+        // -------- Graphics GRID ------------
+
+        this.graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x0000aa }, fillStyle: { color: 0xaa0000 } });
+
+        this.rect = new Phaser.Geom.Rectangle(0, 0, 30, 30);
+
+        this.rectangles = [];
+
+        for (var x = 0; x < 5; x++)
+        {
+            for (var y = 0; y < 3; y++)
+            {
+                this.rectangles.push(new Phaser.Geom.Rectangle(x * 320, y * 200, 320, 200));
+            }
+        }
+
+        for (var i = 0; i < this.rectangles.length; i++)
+        {
+            if (!Phaser.Geom.Rectangle.ContainsRect(this.rectangles[i], this.rect))
+            {
+                let point = this.rectangles[i].getRandomPoint();
+                let rectCenter = Phaser.Geom.Rectangle.GetCenter(this.rectangles[i]); 
+
+                this.graphics.fillCircle(point.x, point.y, 4);
+
+                this.graphics.strokeRectShape(this.rectangles[i]);
+
+                // Checks if the platform is inside the rectangle 
+                if(point.x < rectCenter.x - 110)
+                {
+                    point.x = rectCenter.x - 110;
+                }
+                else if(point.x > rectCenter.x + 110)
+                {
+                    point.x = rectCenter.x + 110;
+                }
+
+                if(point.y < rectCenter.y - 62)
+                {
+                    point.y = rectCenter.y - 62;
+                }
+                else if(point.y > rectCenter.y + 62)
+                {
+                    point.y = rectCenter.y + 62;
+                }
+
+                // end of inside rectangle check ------------
+                
+                
+                if(point.y > 510)
+                {
+                    point.y = 510;
+                } 
+                else if(point.y < 100)
+                {
+                    point.y = 100;
+                }
+
+                this.platforms.create(point.x, point.y, "platform");
+            }
+        }
+
+        this.graphics.fillCircle(500, 510, 4);
+
+        // --------- Graphics Grid end ---------
 
         //----------------------------- Animations Start ------------------------------------
         this.anims.create({
