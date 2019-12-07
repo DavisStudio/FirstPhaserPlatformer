@@ -4,10 +4,12 @@ class FirstScene extends Phaser.Scene
     cursors;
     bombs;
     scoreText;
+    ground;
     score = 0;
     ingGame = true;
     points = [];
-    
+    platformCol;
+
     constructor(config)
     {
         super(config);
@@ -45,7 +47,7 @@ class FirstScene extends Phaser.Scene
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.platforms = this.physics.add.staticGroup();
-        this.physics.add.collider(this.player, this.platforms);
+        this.platformCol = this.physics.add.collider(this.player, this.platforms);
         this.platforms.create(800, 586, "groundPlatform");
         /*
         this.platforms.create(100, 500, "platform");
@@ -189,12 +191,9 @@ class FirstScene extends Phaser.Scene
                     point.y = 100;
                 }
 
-                this.platforms.create(point.x, point.y, "platform");
+                this.platforms.create(point.x, point.y, "platform").setName("platform");
             }
         }
-
-        this.graphics.fillCircle(500, 510, 4);
-
         // --------- Graphics Grid end ---------
 
         //----------------------------- Animations Start ------------------------------------
@@ -266,8 +265,17 @@ class FirstScene extends Phaser.Scene
             {
                 this.player.jumpCount = 0;
             }
-            
-            
+
+            // lets player jump trough platforms from under
+            if(this.player.body.velocity.y < 1)
+            {
+               this.platformCol.active = false;
+            }
+            else
+            {
+                this.platformCol.active = true;
+            }
+
         }
     }
 
