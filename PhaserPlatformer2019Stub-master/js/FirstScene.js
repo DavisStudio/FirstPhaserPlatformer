@@ -17,7 +17,9 @@ class FirstScene extends Phaser.Scene
 
     preload()
     {
-        this.load.image("hills", "assets/hills.jpg");
+        this.load.image("hills", "assets/hills.png");
+        this.load.image("grass", "assets/grass.png");
+        this.load.image("clouds", "assets/clouds.png");
         this.load.spritesheet("dude", "assets/dude.png", {
             frameWidth: 32, 
             frameHeight: 48});
@@ -25,6 +27,7 @@ class FirstScene extends Phaser.Scene
         this.load.image("platform", "assets/platform-100.png");
         this.load.image("star", "assets/star.png");
         this.load.image("bomb", "assets/bomb.png");
+
     }
 
     rect;
@@ -36,7 +39,9 @@ class FirstScene extends Phaser.Scene
         this.physics.world.setBounds(0,0,1600,600);
         this.cameras.main.setBounds(0,0,1600,600);
 
-        this.add.image(800,300, "hills");
+        this.add.image(800,300, "clouds").scrollFactorX = 0.15;
+        this.add.image(800,300, "hills").scrollFactorX = 0.4;
+        this.add.image(800,300, "grass").scrollFactorX = 0.8;
         this.player = this.physics.add.sprite(700,450, "dude");
         this.player.setCollideWorldBounds(true);
         this.player.jumpCount = 0;
