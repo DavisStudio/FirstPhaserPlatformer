@@ -20,6 +20,7 @@ class FirstScene extends Phaser.Scene
         this.load.image("hills", "assets/hills.png");
         this.load.image("grass", "assets/grass.png");
         this.load.image("clouds", "assets/clouds.png");
+        this.load.image("sky", "assets/sky.png");
         this.load.spritesheet("dude", "assets/dude.png", {
             frameWidth: 32, 
             frameHeight: 48});
@@ -39,6 +40,7 @@ class FirstScene extends Phaser.Scene
         this.physics.world.setBounds(0,0,1600,600);
         this.cameras.main.setBounds(0,0,1600,600);
 
+        this.add.image(800,300, "sky");
         this.add.image(800,300, "clouds").scrollFactorX = 0.15;
         this.add.image(800,300, "hills").scrollFactorX = 0.4;
         this.add.image(800,300, "grass").scrollFactorX = 0.8;
@@ -282,6 +284,7 @@ class FirstScene extends Phaser.Scene
             }
 
         }
+
     }
 
     collectStar(player, star)
@@ -324,6 +327,7 @@ class FirstScene extends Phaser.Scene
         this.physics.pause();
         this.player.setTint(0xff0000);
         this.player.anims.play("relaxPlayer");
+        this.resetGame();
     }
 
     checkPlatformOverlap()
@@ -345,5 +349,28 @@ class FirstScene extends Phaser.Scene
         });
 
         return overlap;
+    }
+
+    resetGame()
+    {
+        this.cameras.main.on('camerafadeoutcomplete', function () {
+            
+            this.add.image(800,300, "sky");
+
+            this.endScoreText = this.add.text(300,100,"Your Score: " + this.score,{
+                fontSize: "48px",
+                fill: "#000"
+            }).setScrollFactor(0);
+    
+            this.restartText = this.add.text(200,200, "Press space to continue" ,{
+                fontSize: "48px",
+                fill: "#000"
+            }).setScrollFactor(0);
+
+            this.cameras.main.fadeFrom(2000, 66, 215, 245);
+
+        }, this);
+
+        this.cameras.main.fade(2000, 66, 215, 245);
     }
 }
