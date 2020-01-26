@@ -56,6 +56,8 @@ class FirstScene extends Phaser.Scene
         this.platforms = this.physics.add.staticGroup();
         this.platformCol = this.physics.add.collider(this.player, this.platforms);
         this.platforms.create(800, 586, "groundPlatform");
+        
+        this.cameras.main.fadeFrom(2000, 66, 215, 245);
         /*
         this.platforms.create(100, 500, "platform");
         this.platforms.create(300, 300, "platform");
@@ -284,6 +286,13 @@ class FirstScene extends Phaser.Scene
             }
 
         }
+        else
+        {
+            if(this.cursors.space.isDown)
+            {
+                this.reloadScene();  
+            }
+        }
 
     }
 
@@ -327,6 +336,7 @@ class FirstScene extends Phaser.Scene
         this.physics.pause();
         this.player.setTint(0xff0000);
         this.player.anims.play("relaxPlayer");
+        this.ingGame = false;
         this.resetGame();
     }
 
@@ -357,13 +367,13 @@ class FirstScene extends Phaser.Scene
             
             this.add.image(800,300, "sky");
 
-            this.endScoreText = this.add.text(300,100,"Your Score: " + this.score,{
-                fontSize: "48px",
+            this.endScoreText = this.add.text(280,220,"Your Score: " + this.score,{
+                fontSize: "32px",
                 fill: "#000"
             }).setScrollFactor(0);
     
-            this.restartText = this.add.text(200,200, "Press space to continue" ,{
-                fontSize: "48px",
+            this.restartText = this.add.text(200,280, "Press space to continue" ,{
+                fontSize: "32px",
                 fill: "#000"
             }).setScrollFactor(0);
 
@@ -372,5 +382,11 @@ class FirstScene extends Phaser.Scene
         }, this);
 
         this.cameras.main.fade(2000, 66, 215, 245);
+    }
+
+    reloadScene()
+    {
+        this.ingGame = true;
+        this.scene.restart();
     }
 }
